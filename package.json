@@ -1,0 +1,11 @@
+{
+  "name": "tripnest",
+  "version": "1.0.0",
+  "description": "TripNest-find your perfect stay for every journey",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Md Mannan Dewan",
+  "license": "ISC"
+}
