@@ -1,9 +1,0 @@
-<% layout('./layouts/boilerplate') -%>
-<body>
-  <h3>All listings</h3>
-  <ul>
-    <% for (const listing of allListing) { %>
-    <li><a href="/listings/<%=listing._id%>"><%=listing.title%></a></li>
-    <% } %>
-  </ul>
-</body>

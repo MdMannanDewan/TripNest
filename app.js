@@ -36,7 +36,7 @@ app.get("/", (req, res) => {
 // index route
 app.get("/listings", async (req, res) => {
   const allListing = await Listing.find({});
-  res.render("./listings/listing", { allListing });
+  res.render("./listings/index", { allListing });
 });
 // create new listing route and this block of code must be placed before show route otherwise app will consider new as a id
 app.get("/listings/new", (req, res) => {
