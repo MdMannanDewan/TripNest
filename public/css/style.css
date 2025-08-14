@@ -1,0 +1,38 @@
+.fa-compass {
+  color: #fe424d;
+  font-size: 2rem;
+}
+.navbar {
+  height: 5rem;
+  background-color: white;
+}
+
+.nav-link {
+  color: #222222 !important;
+}
+
+.f-info-links a {
+  text-decoration: none;
+  color: #222222;
+}
+
+.f-info-links a:hover {
+  text-decoration: underline;
+}
+
+.f-info {
+  height: 8rem;
+  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: #ebebeb;
+}
+.f-info-socials {
+  width: 100%;
+  font-size: 1.5rem;
+}
+.f-info-links {
+  width: 100%;
+}

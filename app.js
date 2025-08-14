@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const Listing = require("./models/listing");
 const path = require("path");
 const methodOverride = require("method-override");
+const ejsMate = require("ejs-mate");
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/TripNest";
 main()
@@ -24,6 +25,8 @@ app.set("views", path.join(__dirname, "views"));
 // express middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+app.engine("ejs", ejsMate);
+app.use(express.static(path.join(__dirname, "/public")));
 
 // routes
 app.get("/", (req, res) => {
