@@ -8,30 +8,36 @@
         method="POST"
         novalidate
         class="needs-validation"
+        novalidate
       >
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
           <input
+            id="title"
             class="form-control"
             type="text"
             name="listing[title]"
             placeholder="Add a catchy Title"
             required
           />
+          <div class="valid-feedback">looks good!</div>
         </div>
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
           <textarea
+            id="description"
             class="form-control"
             type="text"
             name="listing[description]"
             placeholder="Write a short description"
             required
           ></textarea>
+          <div class="valid-feedback">looks good</div>
         </div>
         <div class="mb-3">
           <label for="image" class="form-label">Image</label>
           <input
+            id="image"
             class="form-control"
             type="text"
             name="listing[image]"
@@ -42,33 +48,39 @@
           <div class="mb-3 col-md-4">
             <label for="price" class="form-label">Price</label>
             <input
+              id="price"
               class="form-control"
               type="number"
               name="listing[price]"
               placeholder="1000"
               required
             />
+            <div class="invalid-feedback">please enter valid price</div>
           </div>
           <div class="mb-3 col-md-8">
             <label for="country" class="form-label">Country</label>
             <input
+              id="country"
               class="form-control"
               type="text"
               name="listing[country]"
               placeholder="Bangladesh"
               required
             />
+            <div class="invalid-feedback">please enter Country name</div>
           </div>
         </div>
         <div class="mb-3">
           <label for="location" class="form-label">Location</label>
           <input
+            id="location"
             class="form-control"
             type="text"
             name="listing[location]"
             placeholder="Mirpur,Dhaka"
             required
           />
+          <div class="invalid-feedback">please enter location</div>
         </div>
         <button class="btn btn-dark add-btn offset-5">Add</button>
       </form>

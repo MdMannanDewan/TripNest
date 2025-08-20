@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+const Review = require("./review");
+const CustomError = require("../utils/CustomError");
 
 const listingSchema = new Schema({
   title: {
@@ -20,6 +22,7 @@ const listingSchema = new Schema({
   },
   price: {
     type: Number,
+    min: [1, "Price can not be negative"],
   },
   location: {
     type: String,
@@ -27,6 +30,22 @@ const listingSchema = new Schema({
   country: {
     type: String,
   },
+  reviews: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Review",
+    },
+  ],
+});
+
+listingSchema.post("findOneAndDelete", async (listing) => {
+  if (listing) {
+    try {
+      await Review.deleteMany({ _id: { $in: listing.reviews } });
+    } catch (err) {
+      throw new CustomError("500", "Can not delete reviews");
+    }
+  }
 });
 
 const Listing = mongoose.model("Listing", listingSchema);
