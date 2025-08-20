@@ -38,6 +38,7 @@ const listingSchema = new Schema({
   ],
 });
 
+// post middleware for handling delete of reviews after deleting listing
 listingSchema.post("findOneAndDelete", async (listing) => {
   if (listing) {
     try {
