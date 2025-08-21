@@ -3,15 +3,20 @@ const app = express();
 const PORT = 8080;
 const mongoose = require("mongoose");
 const path = require("path");
-const sesssion = require("express-session");
 
+const sesssion = require("express-session");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const CustomError = require("./utils/CustomError");
 const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
 
-const listings = require("./routes/listing");
-const reviews = require("./routes/review");
+const listingRouter = require("./routes/listing");
+const reviewRouter = require("./routes/review");
+const userRouter = require("./routes/user");
+
+const User = require("./models/user");
 
 // MongoDB connection
 const MONGO_URL = "mongodb://127.0.0.1:27017/TripNest";
@@ -49,10 +54,26 @@ const sessionOption = {
 app.use(sesssion(sessionOption));
 app.use(flash()); // flash must be used after using session or cookie-parser
 
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(User.authenticate())); // to authenticate User
+passport.serializeUser(User.serializeUser()); // serialize users into the session
+passport.deserializeUser(User.deserializeUser()); // deserialized users into the session
+
 // Home Route
 app.get("/", (req, res) => {
   res.send("Hi, I am root");
 });
+
+// app.get("/demouser", async (req, res) => {
+//   const fakeUser = new User({
+//     email: "mannandewan@gmail.com",
+//     username: "mannan", // passport will check if the username is unique or not
+//   });
+//   const registeredUser = await User.register(fakeUser, "1234");
+//   res.send(registeredUser);
+// });
 
 // flash message middleware
 app.use((req, res, next) => {
@@ -62,8 +83,9 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use("/listings", listings);
-app.use("/listings/:id/reviews", reviews);
+app.use("/listings", listingRouter);
+app.use("/listings/:id/reviews", reviewRouter);
+app.use("/", userRouter);
 
 // Not found route
 app.use((req, res, next) => {

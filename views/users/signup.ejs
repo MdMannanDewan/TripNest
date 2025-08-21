@@ -1,0 +1,54 @@
+<% layout('./layouts/boilerplate') -%>
+<div class="container vh-100 d-flex justify-content-center align-items-center">
+  <div class="card shadow-lg p-4" style="max-width: 400px; width: 100%">
+    <h3 class="text-center mb-4">Sign Up</h3>
+    <form action="/signup" method="POST" class="needs-validation" novalidate>
+      <!-- Email -->
+      <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input
+          type="email"
+          name="email"
+          class="form-control"
+          id="email"
+          placeholder="Enter your email"
+          required
+        />
+        <div class="invalid-feedback">please enter Email</div>
+      </div>
+
+      <!-- Username -->
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input
+          type="text"
+          name="username"
+          class="form-control"
+          id="username"
+          placeholder="Choose a username"
+          required
+        />
+        <div class="invalid-feedback">please enter username</div>
+      </div>
+
+      <!-- Password -->
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          name="password"
+          class="form-control"
+          id="password"
+          placeholder="Enter your password"
+          required
+        />
+        <div class="invalid-feedback">please enter a strong password</div>
+      </div>
+
+      <!-- Submit button -->
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+      </div>
+    </form>
+  </div>
+</div>
