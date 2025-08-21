@@ -36,8 +36,10 @@ router.get(
   wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const listing = await Listing.findById(id).populate("reviews");
-    if (!listing) throw new CustomError(404, "Listing not Found");
-    res.render("./listings/show", { listing });
+    if (!listing) {
+      req.flash("error", "status: 414, the listing is not found");
+      res.redirect("../listings");
+    } else res.render("./listings/show", { listing });
   })
 );
 
@@ -51,6 +53,7 @@ router.post(
     const listing = req.body.listing;
     const newListing = new Listing(listing);
     await newListing.save();
+    req.flash("success", `Added new Listing ${listing.title} successfully`);
     res.redirect("./listings");
   })
 );
@@ -61,7 +64,10 @@ router.get(
   wrapAsync(async (req, res, next) => {
     // const {id} = req.params;
     const listing = await Listing.findById(req.params.id);
-    res.render("./listings/edit", { listing });
+    if (!listing) {
+      req.flash("error", "status: 404, the listing is not found");
+      res.redirect("../");
+    } else res.render("./listings/edit", { listing });
   })
 );
 
@@ -75,6 +81,7 @@ router.put(
       { ...req.body.listing },
       { runValidators: true, new: true }
     );
+    req.flash("success", `Edited Listing ${updatedListing.title} successfully`);
     res.redirect(`../listings/${id}`);
     // res.redirect("../listings");
   })
@@ -87,6 +94,7 @@ router.delete(
     const { id } = req.params;
     const listing = await Listing.findByIdAndDelete(id);
     console.log(`deleted ${listing.title}`);
+    req.flash("success", `Deleted Listing ${listing.title} successfully`);
     res.redirect("../listings");
   })
 );
