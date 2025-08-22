@@ -31,8 +31,8 @@
       <button class="btn btn-dark px-3 delete-btn">Delete</button>
     </form>
   </div>
-  <% } %>
   <hr />
+  <% } %> <% if (currentUser) { %>
   <div class="d-flex align-items-center flex-column mb-3">
     <h4 class="mb-3">Leave a Review</h4>
     <form
@@ -68,6 +68,7 @@
       <button class="btn btn-outline-dark">Submit</button>
     </form>
   </div>
+  <% } %>
   <hr />
   <div>
     <h4>All Reviews</h4>
@@ -76,15 +77,17 @@
     >
       <% for( let review of listing.reviews) { %>
       <div class="m-2 border border-2 px-3 py-2 bg-secondary">
-        <h5>Tony Stark</h5>
+        <h5><%= review.author.username %></h5>
         <div><%= review.comment %></div>
         <div>Rating: <%=review.rating %></div>
+        <% if (currentUser && currentUser._id.equals(review.author._id)) { %>
         <form
           action="/listings/<%=listing._id%>/reviews/<%=review._id%>?_method=DELETE"
           method="POST"
         >
           <button class="btn btn-danger my-2">Delete</button>
         </form>
+        <% } %>
       </div>
       <% } %>
     </div>

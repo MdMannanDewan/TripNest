@@ -1,6 +1,5 @@
 const Listing = require("../models/listing");
-const { listingSchema, reviewSchema } = require("../schema");
-const CustomError = require("../utils/CustomError");
+const Review = require("../models/review");
 
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
@@ -24,31 +23,11 @@ module.exports.isOwner = async (req, res, next) => {
   } else next();
 };
 
-// Validate Listing with JOI in server side
-module.exports.validateListing = (req, res, next) => {
-  let { error } = listingSchema.validate(req.body);
-  if (error) {
-    const errMsg = error.details.map((el) => el.message).join(",");
-    throw new CustomError(400, errMsg);
-  } else next();
-};
-
-// Vallidate review on server side
-module.exports.validateReview = (req, res, next) => {
-  const { error } = reviewSchema.validate(req.body);
-  if (error) {
-    const errMsg = error.details.map((el) => el.message).join(",");
-    console.log(errMsg);
-    throw new CustomError(400, errMsg);
-  } else next();
-};
-
-// user validation
-module.exports.validateUser = (req, res, next) => {
-  const { email } = req.body;
-  let { error } = userSchema.validate({ email });
-  if (error) {
-    const errMsg = error.details.map((el) => el.message).join(",");
-    throw new CustomError(400, errMsg);
+module.exports.isReviewAuthor = async (req, res, next) => {
+  const { id, reviewId } = req.params;
+  const review = await Review.findById(reviewId);
+  if (!res.locals.currentUser._id.equals(review.author)) {
+    req.flash("error", "You are not authorized to perform this action");
+    return res.redirect(req.get("referer") || "./listings");
   } else next();
 };
