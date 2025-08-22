@@ -7,6 +7,7 @@ const { userSchema } = require("../schema");
 const wrapAsync = require("../utils/wrapAsync");
 const CustomError = require("../utils/CustomError");
 const passport = require("passport");
+const { saveRedirectUrl } = require("../middlewares/isLoggedIn");
 
 const validateUser = (req, res, next) => {
   const { email } = req.body;
@@ -35,11 +36,12 @@ router.post(
         username,
       });
       const registeredUser = await User.register(user, password);
-      req.flash(
-        "success",
-        `Welcome ${registeredUser.username}!! please Log In`
-      );
-      res.redirect("/login");
+      req.login(registeredUser, (err) => {
+        // it automatically log in user after signup
+        if (err) return next();
+        req.flash("success", `Welcome ${registeredUser.username}!!`);
+        return res.redirect("/listings");
+      });
     } catch (err) {
       req.flash("error", err.message);
       res.redirect("/signup");
@@ -54,20 +56,22 @@ router.get("/login", (req, res) => {
 
 router.post(
   "/login",
+  saveRedirectUrl,
   passport.authenticate("local", {
     failureRedirect: "/login",
     failureFlash: true,
   }),
   async (req, res) => {
     req.flash("success", `Welcome ${req.body.username}`);
-    res.redirect("/listings");
+    const redirectUrl = res.locals.redirectUrl || "/listings";
+    res.redirect(redirectUrl);
   }
 );
 
 router.get("/logout", (req, res, next) => {
   req.logOut((err) => {
     if (err) {
-      next(err);
+      return next(err);
     } else {
       req.flash("success", "You are logged out");
       res.redirect("/listings");
