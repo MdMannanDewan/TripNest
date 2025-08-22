@@ -14,26 +14,26 @@ const {
   logout,
 } = require("../controllers/users");
 
-// signUp route
-router.get("/signup", renderSignupForm);
-
-// Create Route
-// post method
-router.post("/signup", validateUser, wrapAsync(signup));
+// SignUp Route
+router
+  .route("/signup")
+  .get(renderSignupForm)
+  .post(validateUser, wrapAsync(signup));
 
 // Login Route
-router.get("/login", renderLoginForm);
+router
+  .route("/login")
+  .get(renderLoginForm)
+  .post(
+    saveRedirectUrl,
+    passport.authenticate("local", {
+      failureRedirect: "/login",
+      failureFlash: true,
+    }),
+    login
+  );
 
-router.post(
-  "/login",
-  saveRedirectUrl,
-  passport.authenticate("local", {
-    failureRedirect: "/login",
-    failureFlash: true,
-  }),
-  login
-);
-
+// Logout Route
 router.get("/logout", logout);
 
 module.exports = router;
