@@ -9,6 +9,9 @@
         alt="listing image"
       />
       <div class="card-body">
+        <p class="mt-2">
+          <strong>Owned By:</strong> <em><%= listing.owner.username %></em>
+        </p>
         <p class="card-text">
           <%=listing.description%>
           <br />Price: &#2547;<%=listing.price.toLocaleString("en-BD")%>
@@ -17,6 +20,7 @@
       </div>
     </div>
   </div>
+  <% if (currentUser && currentUser._id.equals(listing.owner._id)) { %>
   <div class="d-flex align-items-center justify-content-center gap-4 mb-3">
     <div>
       <a href="/listings/<%=listing._id%>/edit"
@@ -27,6 +31,7 @@
       <button class="btn btn-dark px-3 delete-btn">Delete</button>
     </form>
   </div>
+  <% } %>
   <hr />
   <div class="d-flex align-items-center flex-column mb-3">
     <h4 class="mb-3">Leave a Review</h4>

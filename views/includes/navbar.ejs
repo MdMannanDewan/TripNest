@@ -20,10 +20,10 @@
 
       <!-- Right side auth buttons -->
       <div class="navbar-nav ms-auto">
-        <% if (!isLoggedIn) { %>
+        <% if (!currentUser) { %>
         <a class="btn btn-outline-primary me-2" href="/signup">Signup</a>
         <a class="btn btn-primary me-2" href="/login">Login</a>
-        <% } %> <% if(isLoggedIn) { %>
+        <% } %> <% if(currentUser) { %>
         <a class="btn btn-danger" href="/logout">Logout</a>
         <% } %>
       </div>

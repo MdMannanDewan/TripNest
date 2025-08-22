@@ -2,23 +2,12 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 
 const wrapAsync = require("../utils/wrapAsync");
-const CustomError = require("../utils/CustomError");
 
 const Review = require("../models/review");
 const Listing = require("../models/listing");
-const { reviewSchema } = require("../schema");
 
 const { isLoggedIn } = require("../middlewares/isLoggedIn");
-
-// Vallidate review on server side
-const validateReview = (req, res, next) => {
-  const { error } = reviewSchema.validate(req.body);
-  if (error) {
-    const errMsg = error.details.map((el) => el.message).join(",");
-    console.log(errMsg);
-    throw new CustomError(400, errMsg);
-  } else next();
-};
+const { validateReview } = require("../middlewares/validation");
 
 // Reviews
 // Post reviews route

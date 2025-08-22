@@ -79,7 +79,7 @@ app.get("/", (req, res) => {
 app.use((req, res, next) => {
   res.locals.successMsg = req.flash("success");
   res.locals.errorMsg = req.flash("error");
-  res.locals.isLoggedIn = req.user;
+  res.locals.currentUser = req.user;
   next();
 });
 

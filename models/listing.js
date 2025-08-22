@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const Review = require("./review");
+const User = require("./user");
 const CustomError = require("../utils/CustomError");
 
 const listingSchema = new Schema({
@@ -36,6 +37,10 @@ const listingSchema = new Schema({
       ref: "Review",
     },
   ],
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 // post middleware for handling delete of reviews after deleting listing
