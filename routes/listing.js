@@ -7,6 +7,8 @@ const CustomError = require("../utils/CustomError");
 const Listing = require("../models/listing");
 const { listingSchema } = require("../schema");
 
+const { isLoggedIn } = require("../middlewares/isLoggedIn");
+
 // Validate Listing with JOI in server side
 const validateListing = (req, res, next) => {
   let { error } = listingSchema.validate(req.body);
@@ -26,7 +28,7 @@ router.get(
 );
 
 // create new listing route and this block of code must be placed before show route otherwise router will consider new as a id
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
   res.render("./listings/new");
 });
 
@@ -47,6 +49,7 @@ router.get(
 router.post(
   "/",
   validateListing,
+  isLoggedIn,
   wrapAsync(async (req, res, next) => {
     // const { title, description, image, price, location, country } = req.body;
     // another way
@@ -54,13 +57,15 @@ router.post(
     const newListing = new Listing(listing);
     await newListing.save();
     req.flash("success", `Added new Listing ${listing.title} successfully`);
-    res.redirect("./listings");
+    console.log(`in post`);
+    res.redirect("../listings");
   })
 );
 
 // Update Route
 router.get(
   "/:id/edit",
+  isLoggedIn,
   wrapAsync(async (req, res, next) => {
     // const {id} = req.params;
     const listing = await Listing.findById(req.params.id);
@@ -73,6 +78,7 @@ router.get(
 
 router.put(
   "/:id",
+  isLoggedIn,
   validateListing,
   wrapAsync(async (req, res, next) => {
     const { id } = req.params;
@@ -90,6 +96,7 @@ router.put(
 //  Delete Route
 router.delete(
   "/:id",
+  isLoggedIn,
   wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const listing = await Listing.findByIdAndDelete(id);

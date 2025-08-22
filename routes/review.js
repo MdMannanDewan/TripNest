@@ -8,6 +8,8 @@ const Review = require("../models/review");
 const Listing = require("../models/listing");
 const { reviewSchema } = require("../schema");
 
+const { isLoggedIn } = require("../middlewares/isLoggedIn");
+
 // Vallidate review on server side
 const validateReview = (req, res, next) => {
   const { error } = reviewSchema.validate(req.body);
@@ -23,6 +25,7 @@ const validateReview = (req, res, next) => {
 router.post(
   "/",
   validateReview,
+  isLoggedIn,
   wrapAsync(async (req, res, next) => {
     const listing = await Listing.findById(req.params.id);
     const newReview = new Review(req.body.review);
@@ -30,7 +33,6 @@ router.post(
     listing.reviews.push(newReview);
     await listing.save();
     req.flash("success", `Added new Review for ${listing.title}`);
-    req.flash("error", "Some Error Ocurred");
     res.redirect(`/listings/${listing._id}`);
   })
 );
@@ -38,12 +40,12 @@ router.post(
 // Delete reviews route
 router.delete(
   "/:reviewId",
+  isLoggedIn,
   wrapAsync(async (req, res) => {
     const { id, reviewId } = req.params;
     await Review.findByIdAndDelete(reviewId);
     await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
     req.flash("success", `Deleted review`);
-    req.flash("error", "Some Error Ocurred");
     res.redirect(`/listings/${id}`);
   })
 );

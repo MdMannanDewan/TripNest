@@ -58,7 +58,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(new LocalStrategy(User.authenticate())); // to authenticate User
-passport.serializeUser(User.serializeUser()); // serialize users into the session
+passport.serializeUser(User.serializeUser()); // serialize users into the session(how user data is saved in session)
 passport.deserializeUser(User.deserializeUser()); // deserialized users into the session
 
 // Home Route

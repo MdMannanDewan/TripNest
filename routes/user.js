@@ -59,8 +59,19 @@ router.post(
     failureFlash: true,
   }),
   async (req, res) => {
-    console.log(`i'm here`);
-    res.send("Welcome to Trip Nest");
+    req.flash("success", `Welcome ${req.body.username}`);
+    res.redirect("/listings");
   }
 );
+
+router.get("/logout", (req, res, next) => {
+  req.logOut((err) => {
+    if (err) {
+      next(err);
+    } else {
+      req.flash("success", "You are logged out");
+      res.redirect("/listings");
+    }
+  });
+});
 module.exports = router;
