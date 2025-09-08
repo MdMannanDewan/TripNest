@@ -3,6 +3,7 @@ const { Schema } = mongoose;
 const Review = require("./review");
 const User = require("./user");
 const CustomError = require("../utils/CustomError");
+const { required } = require("joi");
 
 const listingSchema = new Schema({
   title: {
@@ -13,13 +14,19 @@ const listingSchema = new Schema({
     type: String,
   },
   image: {
-    type: String,
-    default:
-      "https://images.unsplash.com/photo-1754597302822-4b96f3442d3f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    set: (v) =>
-      v == ""
-        ? "https://images.unsplash.com/photo-1754597302822-4b96f3442d3f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        : v,
+    url: {
+      type: String,
+      default:
+        "https://images.unsplash.com/photo-1754597302822-4b96f3442d3f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      set: (v) =>
+        v == ""
+          ? "https://images.unsplash.com/photo-1754597302822-4b96f3442d3f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          : v,
+    },
+    public_id: {
+      type: String,
+      required: true,
+    },
   },
   price: {
     type: Number,

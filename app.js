@@ -1,6 +1,10 @@
+if (process.env.NODE_ENV != "production") {
+  require("dotenv").config();
+}
+console.log(process.env.CLOUD_NAME);
+
 const express = require("express");
 const app = express();
-const PORT = 8080;
 const mongoose = require("mongoose");
 const path = require("path");
 
@@ -61,6 +65,8 @@ passport.use(new LocalStrategy(User.authenticate())); // to authenticate User
 passport.serializeUser(User.serializeUser()); // serialize users into the session(how user data is saved in session)
 passport.deserializeUser(User.deserializeUser()); // deserialized users into the session
 
+//
+
 // Home Route
 app.get("/", (req, res) => {
   res.send("Hi, I am root");
@@ -99,6 +105,6 @@ app.use((err, req, res, next) => {
   res.status(status).render("error", { status, message });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is listening on port: ${PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Server is listening on port: ${process.env.PORT}`);
 });

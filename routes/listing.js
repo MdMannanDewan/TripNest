@@ -3,9 +3,16 @@ const router = express.Router({ mergeParams: true });
 
 const wrapAsync = require("../utils/wrapAsync");
 
-const { isLoggedIn, isOwner } = require("../middlewares/isLoggedIn");
+const {
+  isLoggedIn,
+  isOwner,
+  saveRedirectUrl,
+} = require("../middlewares/isLoggedIn");
 const { validateListing } = require("../middlewares/validation");
 const listingController = require("../controllers/listings");
+
+const upload = require("../middlewares/upload");
+const { stripeEmptyFile } = require("../middlewares/stripeEmptyFile");
 
 // index and create route
 router
@@ -13,6 +20,8 @@ router
   .get(wrapAsync(listingController.index))
   .post(
     isLoggedIn,
+    upload.single("listing_image"),
+    stripeEmptyFile,
     validateListing,
     wrapAsync(listingController.createListing)
   );
@@ -27,6 +36,8 @@ router
   .put(
     isLoggedIn,
     isOwner,
+    upload.single("listing_image"),
+    stripeEmptyFile,
     validateListing,
     wrapAsync(listingController.updateListing)
   )
