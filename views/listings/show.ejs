@@ -1,4 +1,11 @@
 <% layout('./layouts/boilerplate') -%>
+<script>
+  const MapApiKey = "<%=process.env.MAPTILER_API_KEY%>";
+  const coordinates = "<%- JSON.stringify(listing.geometry.coordinates) %>";
+  if (!coordinates.length)
+    coordinates == [...[89.91514764726162, 24.25074630463834]];
+  console.log(coordinates);
+</script>
 <body>
   <div class="d-flex align-items-center flex-column">
     <h3 class="text-center"><strong><%=listing.title%></strong></h3>
@@ -108,6 +115,7 @@
   </div>
   <% } %>
   <hr />
+  <% if (listing.reviews.length>0) { %>
   <div>
     <h4>All Reviews</h4>
     <div
@@ -149,5 +157,13 @@
 
       <% } %>
     </div>
+  </div>
+  <% } %>
+  <div
+    class="d-flex flex-column align-items-center justify-content-center gap-4 mb-3"
+  >
+    <h4>Where you'll be</h4>
+    <div id="map"></div>
+    <script src="/js/map.js"></script>
   </div>
 </body>

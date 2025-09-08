@@ -9,6 +9,7 @@
   "author": "Md Mannan Dewan",
   "license": "ISC",
   "dependencies": {
+    "@maptiler/sdk": "^3.7.0",
     "cloudinary": "^2.7.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.7",

@@ -15,7 +15,9 @@ function uploadBufferToCloudinary(buffer, options = {}, timeoutMs = 60000) {
       unique_filename: true,
       overwrite: false,
       transformation: [
-        { fetch_format: "auto", quality: "auto" }, // auto-optimize delivery
+        { width: 1000, crop: "scale" },
+        { fetch_format: "auto" },
+        { quality: "auto" }, // auto-optimize delivery
       ],
     };
 

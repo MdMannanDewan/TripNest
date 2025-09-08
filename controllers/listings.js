@@ -2,6 +2,7 @@ const Listing = require("../models/listing");
 const { buildFolderPath } = require("../utils/buildFolderPath");
 const cloudinary = require("../config/cloudinary");
 const { uploadBufferToCloudinary } = require("../utils/cloudinaryUpload");
+const { getCoordinate } = require("../utils/getCoordinate");
 
 module.exports.index = async (req, res, next) => {
   const allListing = await Listing.find({});
@@ -28,12 +29,15 @@ module.exports.createListing = async (req, res, next) => {
   // const { title, description, image, price, location, country } = req.body;
   // another way
   const listing = req.body.listing;
-  console.log(listing);
+  const { location, country } = listing;
+  const geometry = await getCoordinate(`${location}, ${country}`);
+
+  const newListing = new Listing(listing);
+  newListing.owner = req.user._id;
+  newListing.geometry = geometry;
 
   // 1. check if the file exists
   if (!req.file) {
-    const newListing = new Listing(listing);
-    newListing.owner = req.user._id;
     newListing.image = { public_id: "Default image" };
     await newListing.save();
     req.flash(
@@ -49,22 +53,21 @@ module.exports.createListing = async (req, res, next) => {
     folder,
   });
   const { secure_url, public_id } = result;
-  const newListing = new Listing(listing);
-  newListing.owner = req.user._id;
   newListing.image = { url: secure_url, public_id };
   await newListing.save();
   req.flash("success", `Added new Listing ${listing.title} successfully`);
-  console.log(`in post`);
   res.redirect("../listings");
 };
 
 module.exports.renderEditForm = async (req, res, next) => {
   // const {id} = req.params;
   const listing = await Listing.findById(req.params.id);
+  let originalUrl = listing.image.url;
+  originalUrl = originalUrl.replace("/upload", "/upload/h_150,w_200");
   if (!listing) {
     req.flash("error", "status: 404, the listing is not found");
     res.redirect("../");
-  } else res.render("./listings/edit", { listing });
+  } else res.render("./listings/edit", { listing, originalUrl });
 };
 
 module.exports.updateListing = async (req, res, next) => {
