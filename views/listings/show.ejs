@@ -1,10 +1,12 @@
 <% layout('./layouts/boilerplate') -%>
 <script>
   const MapApiKey = "<%=process.env.MAPTILER_API_KEY%>";
-  const coordinates = "<%- JSON.stringify(listing.geometry.coordinates) %>";
-  if (!coordinates.length)
-    coordinates == [...[89.91514764726162, 24.25074630463834]];
-  console.log(coordinates);
+  let coordinates = JSON.parse(
+    "<%- JSON.stringify(listing.geometry.coordinates) %>"
+  );
+  console.log(Array.isArray(coordinates));
+  if (!coordinates.length) coordinates = [89.91514764726162, 24.25074630463834];
+  // console.log(coordinates);
 </script>
 <body>
   <div class="d-flex align-items-center flex-column">

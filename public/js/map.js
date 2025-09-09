@@ -6,4 +6,11 @@ const map = new maptilersdk.Map({
   zoom: 14, // starting zoom
 });
 
-new maptilersdk.Marker({ color: "#FF0000" }).setLngLat(coordinates).addTo(map);
+new maptilersdk.Marker({ color: "#FF0000" })
+  .setLngLat(coordinates)
+  .setPopup(
+    new maptilersdk.Popup().setHTML(
+      "<p>Exact location will be provided after booking</p>"
+    )
+  )
+  .addTo(map);
